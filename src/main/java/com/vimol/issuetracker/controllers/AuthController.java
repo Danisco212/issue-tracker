@@ -43,8 +43,7 @@ public class AuthController {
     @Autowired
     private JwtTokenProvider tokenProvider;
 
-    @GetMapping("/login")
-    public Object loginUser(@CookieValue(required = false, name = "Issue_AuthToken") String authToken){
+    private boolean isLoggedIn(String authToken){
         if(authToken != null && !authToken.equals("")){
             // token exists
             String decrypt = SecurityCipher.decrypt(authToken);
@@ -52,17 +51,41 @@ public class AuthController {
             if(authCorrect){
                 ResponseEntity<User> mUser = authService.loginUser(tokenProvider.getUsername(decrypt));
                 if(mUser != null){
-                    return mUser;
+                    return true;
                 }
-                return tokenProvider.getUsername(authToken);
             }
-            return "incorrect token - " + decrypt;
-        }else{
-            ModelAndView modelAndView = new ModelAndView();
-            modelAndView.addObject("user", new User());
-            modelAndView.setViewName("login.html");
-            return modelAndView;
         }
+        return false;
+    }
+
+    @GetMapping("/login")
+    public Object loginUser(@CookieValue(required = false, name = "Issue_AuthToken") String authToken){
+        if(isLoggedIn(authToken)){
+            return new ModelAndView("redirect:/");
+        }
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("user", new User());
+        modelAndView.setViewName("login.html");
+        return modelAndView;
+
+//        if(authToken != null && !authToken.equals("")){
+//            // token exists
+//            String decrypt = SecurityCipher.decrypt(authToken);
+//            boolean authCorrect = tokenProvider.validateToken(decrypt);
+//            if(authCorrect){
+//                ResponseEntity<User> mUser = authService.loginUser(tokenProvider.getUsername(decrypt));
+//                if(mUser != null){
+//                    return mUser;
+//                }
+//                return tokenProvider.getUsername(authToken);
+//            }
+//            return "incorrect token - " + decrypt;
+//        }else{
+//            ModelAndView modelAndView = new ModelAndView();
+//            modelAndView.addObject("user", new User());
+//            modelAndView.setViewName("login.html");
+//            return modelAndView;
+//        }
     }
 
     @PostMapping("/login")
@@ -89,10 +112,62 @@ public class AuthController {
 
 
     @GetMapping("/register")
-    public Object registerUser(){
+    public Object registerUser(@CookieValue(required = false, name = "Issue_AuthToken") String authToken){
+        if(isLoggedIn(authToken)){
+            return new ModelAndView("redirect:/");
+        }else{
+            ModelAndView modelAndView = new ModelAndView();
+            modelAndView.addObject("user", new User());
+            modelAndView.setViewName("register.html");
+            return modelAndView;
+        }
+    }
+
+    private ModelAndView registerError(User user){
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("user", new User());
         modelAndView.setViewName("register.html");
+        modelAndView.addObject("user", user);
+        return modelAndView;
+    }
+
+    @PostMapping("/register")
+    public Object registerUser(@ModelAttribute("user") User user, Model model, HttpServletResponse response){
+        // check if all fields are filled
+        if(user.getPassword().isEmpty() || user.getPhoneNumber().isEmpty() || user.getEmail().isEmpty() || user.getFirstName().isEmpty() || user.getLastName().isEmpty()){
+            // empty field
+            user.setLoginError("Please fill all fields marked with *");
+            return registerError(user);
+        }
+        // check password length
+        if (user.getPassword().length() <6){
+            user.setLoginError("Password must be at least 6 characters");
+            return registerError(user);
+        }
+        // check if there is already a user with that email
+        Optional<User> existUser = userRepository.findByEmail(user.getEmail());
+        if(existUser.isPresent()){
+            // email taken
+            user.setLoginError("This email is already taken by another user");
+            return registerError(user);
+        }
+        // check if the user has the phone number
+        existUser = userRepository.findByPhoneNumber(user.getPhoneNumber());
+        if(existUser.isPresent()){
+            // number is taken
+            user.setLoginError("This number is already taken by another user");
+            return registerError(user);
+        }
+
+        // save the user
+        userRepository.save(user);
+        // login the user
+        ResponseEntity<User> registeredUser = authService.loginUser(user.getEmail(), user.getPassword());
+        // save the token
+        Token mToken = tokenProvider.generateToken(registeredUser.getBody());
+        String encryptedToken = SecurityCipher.encrypt(mToken.getTokenValue());
+        response.addCookie(new Cookie("Issue_AuthToken", encryptedToken));
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("redirect:/");
         return modelAndView;
     }
 }

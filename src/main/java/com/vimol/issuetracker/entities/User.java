@@ -20,6 +20,11 @@ public class User {
         OTHER
     }
 
+    public User(){
+        this.gender = UserGender.MALE;
+        this.position = UserType.REQUESTER;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long _id;
@@ -35,7 +40,7 @@ public class User {
     private String dateOfBirth;
     private String placeOfBirth;
     private String address;
-    private Long phoneNumber;
+    private String phoneNumber;
     private String nameOfUnit;
 
     @JsonIgnore
@@ -153,11 +158,11 @@ public class User {
         this.address = address;
     }
 
-    public Long getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(Long phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
