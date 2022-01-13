@@ -1,5 +1,6 @@
 package com.vimol.issuetracker.controllers;
 
+import com.vimol.issuetracker.dto.Token;
 import com.vimol.issuetracker.entities.User;
 import com.vimol.issuetracker.repositories.UserRepository;
 import com.vimol.issuetracker.services.AuthService;
@@ -7,6 +8,7 @@ import com.vimol.issuetracker.utils.JwtTokenProvider;
 import com.vimol.issuetracker.utils.SecurityCipher;
 import com.vimol.issuetracker.utils.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -43,7 +45,7 @@ public class AuthController {
 
     @GetMapping("/login")
     public Object loginUser(@CookieValue(required = false, name = "Issue_AuthToken") String authToken){
-        if(false){
+        if(authToken != null && !authToken.equals("")){
             // token exists
             String decrypt = SecurityCipher.decrypt(authToken);
             boolean authCorrect = tokenProvider.validateToken(decrypt);
@@ -64,28 +66,27 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public Object greetingSubmit(@ModelAttribute("user") User user, Model model) {
+    public Object greetingSubmit(@ModelAttribute("user") User user, Model model, HttpServletResponse response) {
         if(user.getEmail().isEmpty() || user.getPassword().isEmpty()){
             user.setLoginError("Invalid username or password");
             return user.getLoginError();
         }
-
         ResponseEntity<User> mUser = authService.loginUser(user.getEmail(), user.getPassword());
-
         if(mUser == null){
             user.setLoginError("Invalid username or password");
-            return passwordEncoder.encode(user.getPassword());
+            ModelAndView modelAndView = new ModelAndView();
+            modelAndView.setViewName("login.html");
+            modelAndView.addObject("user", user);
+            return modelAndView;
         }
-        return mUser;
+        Token mToken = tokenProvider.generateToken(mUser.getBody());
+        String encryptedToken = SecurityCipher.encrypt(mToken.getTokenValue());
+        response.addCookie(new Cookie("Issue_AuthToken", encryptedToken));
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("redirect:/");
+        return modelAndView;
     }
 
-    @RequestMapping("/logout")
-    public Object logoutUser(){
-        ModelAndView modelAndView = new ModelAndView("redirect:/register");
-        authService.logoutUser();
-        return "modelAndView";
-//        return authService.logoutUser();
-    }
 
     @GetMapping("/register")
     public Object registerUser(){

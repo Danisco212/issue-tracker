@@ -1,5 +1,6 @@
 package com.vimol.issuetracker.services.impl;
 
+import com.mysql.cj.log.Log;
 import com.vimol.issuetracker.dto.Token;
 import com.vimol.issuetracker.entities.User;
 import com.vimol.issuetracker.repositories.UserRepository;
@@ -67,11 +68,12 @@ public class AuthServiceImpl implements AuthService {
         Optional<User> user = userRepository.findByEmail(email);
 
         if(user.isPresent()){
-            HttpHeaders responseHeaders = new HttpHeaders();
-            Token newAccessToken;
-            newAccessToken = tokenProvider.generateToken(user.get());
-            addAccessTokenCookie(responseHeaders, newAccessToken);
-            return ResponseEntity.ok().headers(responseHeaders).body(user.get());
+//            HttpHeaders responseHeaders = new HttpHeaders();
+//            Token newAccessToken;
+//            newAccessToken = tokenProvider.generateToken(user.get());
+//            addAccessTokenCookie(responseHeaders, newAccessToken);
+//            return ResponseEntity.ok().headers(responseHeaders).body(user.get());
+            return ResponseEntity.ok().body(user.get());
         }else{
             return null;
         }
