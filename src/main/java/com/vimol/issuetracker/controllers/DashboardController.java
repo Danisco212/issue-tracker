@@ -23,19 +23,37 @@ public class DashboardController {
     @Autowired
     private AuthService authService;
 
-    @GetMapping("/")
-    public Object homePage(@CookieValue(required = false, name = "Issue_AuthToken") String authToken, Model model){
-        if(authToken != null && !authToken.equals("")){
+    private User isLoggedIn(String authToken) {
+        if (authToken != null && !authToken.equals("")) {
             // token exists
             String decrypt = SecurityCipher.decrypt(authToken);
             boolean authCorrect = tokenProvider.validateToken(decrypt);
-            if(authCorrect){
+            if (authCorrect) {
                 ResponseEntity<User> mUser = authService.loginUser(tokenProvider.getUsername(decrypt));
-                if(mUser != null){
-                    model.addAttribute("user", mUser.getBody());
-                    return "index";
+                if (mUser != null) {
+                    return mUser.getBody();
                 }
             }
+        }
+        return null;
+    }
+
+    @GetMapping("/")
+    public Object homePage(@CookieValue(required = false, name = "Issue_AuthToken") String authToken, Model model) {
+        User user = isLoggedIn(authToken);
+        if (user != null) {
+            model.addAttribute("user", user);
+            return "index";
+        }
+        return new ModelAndView("redirect:/login");
+    }
+
+    @GetMapping("/categories")
+    public Object categories(@CookieValue(required = false, name = "Issue_AuthToken") String authToken, Model model) {
+        User user = isLoggedIn(authToken);
+        if (user != null) {
+            model.addAttribute("user", user);
+            return "categories";
         }
         return new ModelAndView("redirect:/login");
     }

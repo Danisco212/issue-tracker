@@ -7,6 +7,7 @@ import com.vimol.issuetracker.services.AuthService;
 import com.vimol.issuetracker.utils.JwtTokenProvider;
 import com.vimol.issuetracker.utils.SecurityCipher;
 import com.vimol.issuetracker.utils.UserPrincipal;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -49,9 +50,13 @@ public class AuthController {
             String decrypt = SecurityCipher.decrypt(authToken);
             boolean authCorrect = tokenProvider.validateToken(decrypt);
             if(authCorrect){
-                ResponseEntity<User> mUser = authService.loginUser(tokenProvider.getUsername(decrypt));
-                if(mUser != null){
-                    return true;
+                try {
+                    ResponseEntity<User> mUser = authService.loginUser(tokenProvider.getUsername(decrypt));
+                    if(mUser != null){
+                        return true;
+                    }
+                }catch (ExpiredJwtException e){
+                    e.printStackTrace();
                 }
             }
         }
@@ -68,24 +73,6 @@ public class AuthController {
         modelAndView.setViewName("login.html");
         return modelAndView;
 
-//        if(authToken != null && !authToken.equals("")){
-//            // token exists
-//            String decrypt = SecurityCipher.decrypt(authToken);
-//            boolean authCorrect = tokenProvider.validateToken(decrypt);
-//            if(authCorrect){
-//                ResponseEntity<User> mUser = authService.loginUser(tokenProvider.getUsername(decrypt));
-//                if(mUser != null){
-//                    return mUser;
-//                }
-//                return tokenProvider.getUsername(authToken);
-//            }
-//            return "incorrect token - " + decrypt;
-//        }else{
-//            ModelAndView modelAndView = new ModelAndView();
-//            modelAndView.addObject("user", new User());
-//            modelAndView.setViewName("login.html");
-//            return modelAndView;
-//        }
     }
 
     @PostMapping("/login")
