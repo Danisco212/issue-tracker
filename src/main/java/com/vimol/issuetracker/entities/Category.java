@@ -1,11 +1,10 @@
 package com.vimol.issuetracker.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Category {
@@ -16,6 +15,10 @@ public class Category {
 
     private String catName;
     private String catDescription;
+
+    @OneToMany(mappedBy = "category",cascade = CascadeType.ALL)
+    @JsonManagedReference(value = "subCategories")
+    private List<SubCategory> subCategories;
 
     @JsonIgnore
     private String categoryError;

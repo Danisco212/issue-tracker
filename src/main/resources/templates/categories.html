@@ -50,8 +50,20 @@
   </div>
 
   <div style="margin-left:5px; background-color: black; flex: 1;" class="p-3 bg-light">
-    <h3>Categories</h3>
     <a href="/addCategory" class="btn btn-primary btn-lg">Add Category</a>
+    <h3>Categories</h3>
+    <br>
+    <br>
+    <script th:inline="javascript">
+        function openCategory(data){
+          location.href = "/category?id=" + data
+        }
+    </script>
+    <div class="row-area" th:each="category: ${categories}">
+      <div th:attr="onclick=|openCategory(${category.id})|" style="cursor: pointer; display: flex; align-items: center;" class="shadow-sm p-3 bg-body rounded">
+        <h5 th:text="${category.catName}"></h5>
+      </div>
+    </div>
   </div>
 </section>
 </body>

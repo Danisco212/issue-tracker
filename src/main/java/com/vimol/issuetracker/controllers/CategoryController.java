@@ -11,11 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.Optional;
 
 @Controller
 public class CategoryController {
@@ -76,6 +75,19 @@ public class CategoryController {
         ModelAndView modelAndView =new ModelAndView();
         modelAndView.setViewName("redirect:/category?id=" + newCat.getId());
         return modelAndView;
+    }
 
+    @GetMapping("/category")
+    public Object getCategory(@CookieValue(required = false, name = "Issue_AuthToken") String authToken, @RequestParam("id") Long id, Model model){
+        User user = isLoggedIn(authToken);
+        if (user != null) {
+            model.addAttribute("user", user);
+            Optional<Category> category = categoryRepository.findById(id);
+            if(category.isPresent()){
+                model.addAttribute("category", category.get());
+                return "category";
+            }
+        }
+        return new ModelAndView("redirect:/login");
     }
 }
