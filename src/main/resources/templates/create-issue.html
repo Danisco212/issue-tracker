@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <title>Issue Tracker - Create Issue</title>
+</head>
+<body>
+<section class="d-flex flex-row vh-100">
+    <div class="d-flex flex-column flex-shrink-0 p-3 bg-light" style="width: 280px; height: 100vh;">
+        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+            <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+            <span class="fs-4">Issue Tracker</span>
+        </a>
+        <hr>
+
+        <ul class="nav nav-pills flex-column mb-auto">
+            <li class="nav-item">
+                <a href="/" class="nav-link link-dark">
+                    <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
+                    My Issues
+                </a>
+            </li>
+            <li>
+                <a href="#" class="nav-link active" aria-current="page">
+                    <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
+                    Create Issue
+                </a>
+            </li>
+            <li>
+                <a href="/categories" class="nav-link link-dark">
+                    <svg class="bi me-2" width="16" height="16"><use xlink:href="#table"></use></svg>
+                </a>
+            </li>
+        </ul>
+
+        <hr>
+        <div class="dropdown">
+            <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+                <strong th:text="*{user.email}"></strong>
+            </a>
+            <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
+                <!--            <li><a class="dropdown-item" href="#">New project...</a></li>-->
+                <!--            <li><a class="dropdown-item" href="#">Settings</a></li>-->
+                <!--            <li><a class="dropdown-item" href="#">Profile</a></li>-->
+                <!--            <li><hr class="dropdown-divider"></li>-->
+                <li><p th:attr="onclick=|logoutUser()|" class="dropdown-item" href="#">Sign out</p></li>
+            </ul>
+        </div>
+    </div>
+    <div style="margin-left:5px; background-color: black; flex: 1; height: 100vh; overflow: scroll;" class="p-3 bg-light">
+        <h3>Create Issue</h3>
+
+        <div class="d-flex flex-row" style="height: 100%; overflow: scroll">
+            <div style="flex: 1;" class="flex-1 m-4">
+                <br>
+                <div class="form-group purple-border">
+                    <label for="issueTitle">Issue Title</label>
+                    <input class="form-control" id="issueTitle" rows="3"></input>
+                </div>
+                <br>
+                <div class="form-group purple-border">
+                    <label for="issueReason">Issue Reason</label>
+                    <textarea class="form-control" id="issueReason" rows="3"></textarea>
+                </div>
+                <br>
+                <div class="form-group purple-border">
+                    <label for="issueCategory">Issue Category</label>
+                    <input class="form-control" id="issueCategory" rows="3"></input>
+                </div>
+                <br>
+                <div class="form-group purple-border">
+                    <label for="issueSubCategory">Issue Subcategory</label>
+                    <input class="form-control" id="issueSubCategory" rows="3"></input>
+                </div>
+<!--                <div class="ui-widget">-->
+<!--                    <label for="tags">Tags: </label>-->
+<!--                    <input id="tags">-->
+<!--                </div>-->
+            </div>
+            <div style="width: 350px; height: 100%;" class="bg-white p-4">
+                <br>
+                <label>Issue Status</label>
+                <select class="form-select mb-3" aria-label=".form-select example">
+                    <!--            <option th:field="${issue.status}" value="PENDING">Pending</option>-->
+                    <option th:field="${issue.status}" value="RECEIVED">Received</option>
+                    <option th:field="${issue.status}" value="RESOLVING">Resolving</option>
+                </select>
+                <br>
+                <label>Issue Solver</label>
+                <input th:field="${issue.title}" class="form-control" id="issueAssignee" rows="9"></input>
+
+                <br>
+                <br>
+                <button th:attr="onclick=|checkFields(${user._id})|" type="button" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+
+
+    </div>
+</section>
+
+</body>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script type="text/javascript" th:src="@{/js/logout.js}"></script>
+<script type="text/javascript" th:src="@{/js/createIssue.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</html>

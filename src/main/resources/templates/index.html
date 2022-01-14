@@ -6,53 +6,144 @@
     <title>Issue Tracker - Home Page</title>
 </head>
 <body>
-<!--<nav class="navbar navbar-dark bg-white shadow-sm">-->
-<!--    <a class="navbar-brand text-dark" href="#">-->
-<!--        <img th:src="@{/images/a.png}" width="30" height="30" class="d-inline-block align-top" alt="">-->
-<!--        Issue Tracker-->
-<!--    </a>-->
-<!--</nav>-->
-<div class="d-flex flex-column flex-shrink-0 p-3 bg-light" style="width: 280px; height: 100vh;">
-    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
-        <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
-        <span class="fs-4">Issue Tracker</span>
-    </a>
-    <hr>
-    <ul class="nav nav-pills flex-column mb-auto">
-        <li class="nav-item">
-            <a href="#" class="nav-link active" aria-current="page">
-                <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
-                Home
-            </a>
-        </li>
-        <li>
-            <a href="#" class="nav-link link-dark">
-                <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
-                All Issues
-            </a>
-        </li>
-        <li>
-            <a href="/categories" class="nav-link link-dark">
-                <svg class="bi me-2" width="16" height="16"><use xlink:href="#table"></use></svg>
-                Manage Categories
-            </a>
-        </li>
-    </ul>
-    <hr>
-    <div class="dropdown">
-        <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
-            <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
-            <strong th:text="*{user.email}"></strong>
+<section class="d-flex flex-row vh-100">
+    <div class="d-flex flex-column flex-shrink-0 p-3 bg-light" style="width: 280px; height: 100vh;">
+        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+            <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+            <span class="fs-4">Issue Tracker</span>
         </a>
-        <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
-<!--            <li><a class="dropdown-item" href="#">New project...</a></li>-->
-<!--            <li><a class="dropdown-item" href="#">Settings</a></li>-->
-<!--            <li><a class="dropdown-item" href="#">Profile</a></li>-->
-<!--            <li><hr class="dropdown-divider"></li>-->
-            <li><p th:attr="onclick=|logoutUser()|" class="dropdown-item" href="#">Sign out</p></li>
+        <hr>
+        <ul th:if="${#strings.equals(user.position,'SOLVER')}" class="nav nav-pills flex-column mb-auto">
+            <li class="nav-item">
+                <a href="#" class="nav-link active" aria-current="page">
+                    <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
+                    Home
+                </a>
+            </li>
+            <li>
+                <a href="#" class="nav-link link-dark">
+                    <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
+                    All Issues
+                </a>
+            </li>
+            <li>
+                <a href="/categories" class="nav-link link-dark">
+                    <svg class="bi me-2" width="16" height="16"><use xlink:href="#table"></use></svg>
+                    Manage Categories
+                </a>
+            </li>
         </ul>
+
+        <ul th:if="${#strings.equals(user.position,'REQUESTER')}" class="nav nav-pills flex-column mb-auto">
+            <li class="nav-item">
+                <a href="#" class="nav-link active" aria-current="page">
+                    <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
+                    My Issues
+                </a>
+            </li>
+            <li>
+                <a href="/createIssue" class="nav-link link-dark">
+                    <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
+                    Create Issue
+                </a>
+            </li>
+            <li>
+                <a href="/categories" class="nav-link link-dark">
+                    <svg class="bi me-2" width="16" height="16"><use xlink:href="#table"></use></svg>
+                </a>
+            </li>
+        </ul>
+
+        <hr>
+        <div class="dropdown">
+            <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+                <strong th:text="*{user.email}"></strong>
+            </a>
+            <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
+                <!--            <li><a class="dropdown-item" href="#">New project...</a></li>-->
+                <!--            <li><a class="dropdown-item" href="#">Settings</a></li>-->
+                <!--            <li><a class="dropdown-item" href="#">Profile</a></li>-->
+                <!--            <li><hr class="dropdown-divider"></li>-->
+                <li><p th:attr="onclick=|logoutUser()|" class="dropdown-item" href="#">Sign out</p></li>
+            </ul>
+        </div>
     </div>
-</div>
+    <div style="margin-left:5px; background-color: black; flex: 1; height: 100vh; overflow: scroll;" class="p-3 bg-light">
+        <h3>My Issues</h3>
+        <div class="d-flex flex-row" style="overflow: scroll;">
+            <div style="width: 300px">
+                <br>
+                <p>Pending Issues</p>
+
+                <div class="card shadow-sm p-3 mb-3 bg-body rounded" style="width: 250px;">
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <a href="#" class="card-link">Card link</a>
+                        <a href="#" class="card-link">Another link</a>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm p-3 mb-3 bg-body rounded" style="width: 250px;">
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <a href="#" class="card-link">Card link</a>
+                        <a href="#" class="card-link">Another link</a>
+                    </div>
+                </div>
+            </div>
+            <div style="width: 300px">
+                <br>
+                <p>Received Issues</p>
+
+                <div class="card shadow-sm p-3 mb-5 bg-body rounded" style="width: 250px;">
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <a href="#" class="card-link">Card link</a>
+                        <a href="#" class="card-link">Another link</a>
+                    </div>
+                </div>
+            </div>
+
+            <div style="width: 300px">
+                <br>
+                <p>Resolving Issues</p>
+
+                <div class="card shadow-sm p-3 mb-5 bg-body rounded" style="width: 250px;">
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <a href="#" class="card-link">Card link</a>
+                        <a href="#" class="card-link">Another link</a>
+                    </div>
+                </div>
+            </div>
+
+            <div style="width: 300px">
+                <br>
+                <p>Resolved Issues</p>
+
+                <div class="card shadow-sm p-3 mb-5 bg-body rounded" style="width: 250px;">
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <a href="#" class="card-link">Card link</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
 </body>
 <script th:src="@{/js/logout.js}" />
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
