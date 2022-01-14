@@ -49,7 +49,7 @@
         </div>
     </div>
 
-    <div style="margin-left:5px; background-color: black; flex: 1;" class="p-3 bg-light">
+    <div style="margin-left:5px; background-color: black; flex: 1; height: 100vh; overflow: scroll;" class="p-3 bg-light">
         <h3>Category</h3>
 <!--        <a href="/addCategory" class="btn btn-primary btn-lg">Add Category</a>-->
         <br>
@@ -64,12 +64,20 @@
 
         <br>
         <label class="form-label" >Subcategories</label><br>
-        <p th:if="${#list.isEmpty(category.subCategories)}">There is no sub categories</p>
+        <p th:if="${#lists.isEmpty(category.subCategories)}">There is no sub categories</p>
         <div class="row-area" th:each="subCategory: ${category.subCategories}">
-            <div style="cursor: pointer; display: flex; align-items: center;" class="shadow-sm p-3 bg-body rounded">
+            <div style="cursor: pointer; display: flex; align-items: center;" class="shadow-sm p-3 m-4 bg-body rounded">
                 <h5 th:text="${subCategory.catName}"></h5>
             </div>
         </div>
+        <form th:action="@{/add-subcat/{id}(id=${category.id})}" th:object="${sub_category}" method="post">
+            <div class="form-group">
+                <label for="subCatName">Subcategory Name</label>
+                <input th:field="${sub_category.catName}" type="text" class="form-control" id="subCatName" aria-describedby="emailHelp" placeholder="Enter sub category name">
+            </div>
+            <br>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
     </div>
 </section>
 </body>

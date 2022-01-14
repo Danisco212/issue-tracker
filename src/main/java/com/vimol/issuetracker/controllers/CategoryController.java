@@ -1,8 +1,10 @@
 package com.vimol.issuetracker.controllers;
 
 import com.vimol.issuetracker.entities.Category;
+import com.vimol.issuetracker.entities.SubCategory;
 import com.vimol.issuetracker.entities.User;
 import com.vimol.issuetracker.repositories.CategoryRepository;
+import com.vimol.issuetracker.repositories.SubcategoryRepository;
 import com.vimol.issuetracker.services.AuthService;
 import com.vimol.issuetracker.utils.JwtTokenProvider;
 import com.vimol.issuetracker.utils.SecurityCipher;
@@ -27,6 +29,9 @@ public class CategoryController {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private SubcategoryRepository subcategoryRepository;
 
     private User isLoggedIn(String authToken) {
         if (authToken != null && !authToken.equals("")) {
@@ -85,9 +90,28 @@ public class CategoryController {
             Optional<Category> category = categoryRepository.findById(id);
             if(category.isPresent()){
                 model.addAttribute("category", category.get());
+                model.addAttribute("sub_category", new SubCategory());
                 return "category";
             }
         }
         return new ModelAndView("redirect:/login");
+    }
+
+    @PostMapping("/add-subcat/{id}")
+    public Object addSubCat(@ModelAttribute SubCategory category, @CookieValue(required = false, name = "Issue_AuthToken") String authToken, @PathVariable("id") Long id){
+        if(!category.getCatName().isEmpty()){
+            // error
+            SubCategory newSub = new SubCategory();
+            newSub.setCategory(categoryRepository.findById(id).get());
+            newSub.setCatName(category.getCatName());
+            subcategoryRepository.save(newSub);
+        }
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("redirect:/category?id="+id);
+        modelAndView.addObject("sub_category", new SubCategory());
+        modelAndView.addObject("category", categoryRepository.findById(id).get());
+        modelAndView.addObject("user", isLoggedIn(authToken));
+
+        return modelAndView;
     }
 }

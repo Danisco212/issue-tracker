@@ -1,6 +1,7 @@
 package com.vimol.issuetracker.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 
@@ -15,6 +16,17 @@ public class SubCategory {
     @ManyToOne(cascade = CascadeType.MERGE)
     @JsonBackReference(value = "subCategories")
     private Category category;
+
+    @JsonIgnore
+    private String subCatErr;
+
+    public String getSubCatErr() {
+        return subCatErr;
+    }
+
+    public void setSubCatErr(String subCatErr) {
+        this.subCatErr = subCatErr;
+    }
 
     public Long getId() {
         return id;
