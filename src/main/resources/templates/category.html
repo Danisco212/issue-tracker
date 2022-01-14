@@ -54,13 +54,22 @@
 <!--        <a href="/addCategory" class="btn btn-primary btn-lg">Add Category</a>-->
         <br>
         <br>
-        <label class="form-label" >Category Name *</label><br>
+        <label class="form-label" >Category Name</label><br>
         <p th:text="${category.catName}" type="text" style="color: white; height:100px; font-size: 60px; width: 100%; border-radius: 5px; padding: 10px; outline: none; border: none" class="bg-primary"></p>
         <br>
         <fieldset disabled>
-            <label class="form-label" >Category Description *</label><br>
+            <label class="form-label" >Category Description</label><br>
             <textarea th:field="${category.catDescription}" class="form-control" id="exampleFormControlTextarea1" rows="6"></textarea>
         </fieldset>
+
+        <br>
+        <label class="form-label" >Subcategories</label><br>
+        <p th:if="${#list.isEmpty(category.subCategories)}">There is no sub categories</p>
+        <div class="row-area" th:each="subCategory: ${category.subCategories}">
+            <div style="cursor: pointer; display: flex; align-items: center;" class="shadow-sm p-3 bg-body rounded">
+                <h5 th:text="${subCategory.catName}"></h5>
+            </div>
+        </div>
     </div>
 </section>
 </body>

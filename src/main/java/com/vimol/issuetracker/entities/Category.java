@@ -54,4 +54,12 @@ public class Category {
     public void setCategoryError(String categoryError) {
         this.categoryError = categoryError;
     }
+
+    public List<SubCategory> getSubCategories() {
+        return subCategories;
+    }
+
+    public void setSubCategories(List<SubCategory> subCategories) {
+        this.subCategories = subCategories;
+    }
 }
