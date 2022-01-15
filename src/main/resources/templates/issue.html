@@ -15,15 +15,36 @@
         </a>
         <hr>
 
-        <ul class="nav nav-pills flex-column mb-auto">
+        <ul th:if="${#strings.equals(user.position,'SOLVER')}" class="nav nav-pills flex-column mb-auto">
             <li class="nav-item">
+                <a href="/" class="nav-link active" aria-current="page">
+                    <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
+                    Home
+                </a>
+            </li>
+            <li>
                 <a href="/" class="nav-link link-dark">
+                    <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
+                    All Issues
+                </a>
+            </li>
+            <li>
+                <a href="/categories" class="nav-link link-dark">
+                    <svg class="bi me-2" width="16" height="16"><use xlink:href="#table"></use></svg>
+                    Manage Categories
+                </a>
+            </li>
+        </ul>
+
+        <ul th:if="${#strings.equals(user.position,'REQUESTER')}" class="nav nav-pills flex-column mb-auto">
+            <li class="nav-item">
+                <a href="/" class="nav-link active" aria-current="page">
                     <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
                     My Issues
                 </a>
             </li>
             <li>
-                <a href="#" class="nav-link active" aria-current="page">
+                <a href="/createIssue" class="nav-link link-dark">
                     <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
                     Create Issue
                 </a>
@@ -51,42 +72,42 @@
         </div>
     </div>
     <div style="margin-left:5px; background-color: black; flex: 1; height: 100vh; overflow: scroll;" class="p-3 bg-light">
-        <h3>Issue</h3>
-
+        <h3>Issue - <span th:text="${issue.id}"></span> </h3>
         <div class="d-flex flex-row" style="height: 100%; overflow: scroll">
             <div style="flex: 1;" class="flex-1 m-4">
                 <br>
                 <div class="form-group purple-border">
                     <label for="issueTitle">Issue Title</label>
-                    <input th:field="${issue.title}" class="form-control" id="issueTitle" rows="3"></input>
+                    <input disabled th:field="${issue.title}" class="form-control" id="issueTitle" rows="3"></input>
                 </div>
                 <br>
                 <div class="form-group purple-border">
                     <label for="issueReason">Issue Reason</label>
-                    <textarea th:field="${issue.reason}" class="form-control" id="issueReason" rows="3"></textarea>
+                    <textarea disabled th:field="${issue.reason}" class="form-control" id="issueReason" rows="3"></textarea>
                 </div>
                 <br>
                 <div class="form-group purple-border">
                     <label>Issue Category</label>
-                    <div class="row-area" th:each="category: ${categories}">
-                        <div class="form-check">
-                            <input th:attr="onclick=|showSelectedSubCategories(this, ${category.id})|" th:value="${category.id}" class="form-check-input" type="radio" name="genderSelect" th:id="${category.id}">
-                            <label th:text="${category.catName}" class="form-check-label" th:for="${category.id}"></label>
-                        </div>
-                    </div>
+
                 </div>
                 <br>
                 <div class="form-group purple-border">
-                    <label for="issueSubCategory">Issue Subcategory</label>
-                    <input class="form-control" id="issueSubCategory" rows="3"></input>
+                    <label>Issue Subcategory</label>
+
+                </div>
+                <br>
+                <div class="form-group purple-border">
+                    <label for="issueSolution">Issue Solution</label>
+                    <textarea th:field="${issue.solution}" class="form-control" id="issueSolution" rows="9"></textarea>
                 </div>
             </div>
             <div style="width: 350px; height: 100%;" class="bg-white p-4">
                 <br>
                 <label>Issue Status</label>
-                <select class="form-select mb-3" aria-label=".form-select example">
+                <select id="issueStatusSelect" class="form-select mb-3 issueStatusSelect">
                     <option th:field="${issue.status}" value="RECEIVED">Received</option>
                     <option th:field="${issue.status}" value="RESOLVING">Resolving</option>
+                    <option th:field="${issue.status}" value="RESOLVED">Resolved</option>
                     <option th:field="${issue.status}" value="PENDING">Pending</option>
                 </select>
                 <br>
@@ -95,7 +116,7 @@
 
                 <br>
                 <br>
-                <button th:attr="onclick=|checkFields(${user._id})|" type="button" class="btn btn-primary">Save</button>
+                <button th:if="${#strings.equals(user.position,'SOLVER')}" th:attr="onclick=|updateIssue(${issue.id})|" type="button" class="btn btn-primary">Save</button>
             </div>
         </div>
 

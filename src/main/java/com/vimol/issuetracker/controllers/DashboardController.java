@@ -63,6 +63,9 @@ public class DashboardController {
         if (user != null) {
             // get the user issues
             List<Issue> issues = issueRepository.myCreatedIssues(user.get_id());
+            if(user.getPosition().equals(User.UserType.SOLVER)){
+                issues = issueRepository.myAssignedIssues(user.get_id());
+            }
             model.addAttribute("pending", issues.stream().filter(issue -> issue.getStatus().equals(Issue.IssueStatus.PENDING)).collect(Collectors.toList()));
             model.addAttribute("resolved", issues.stream().filter(issue -> issue.getStatus().equals(Issue.IssueStatus.RESOLVED)).collect(Collectors.toList()));
             model.addAttribute("resolving", issues.stream().filter(issue -> issue.getStatus().equals(Issue.IssueStatus.RESOLVING)).collect(Collectors.toList()));

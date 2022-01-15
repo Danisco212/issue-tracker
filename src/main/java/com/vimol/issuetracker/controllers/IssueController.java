@@ -67,7 +67,7 @@ public class IssueController {
         User user = isLoggedIn(authToken);
         if (user != null) {
             model.addAttribute("user", user);
-            model.addAttribute("issue", issueRepository.findById(id));
+            model.addAttribute("issue", issueRepository.findById(id).get());
             model.addAttribute("categories", categoryRepository.findAll());
             return "issue";
         }

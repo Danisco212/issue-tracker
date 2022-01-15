@@ -21,6 +21,7 @@ public class Issue {
 
     private String title;
     private String reason;
+    private String solution;
     private String createdAt;
     private String updatedAt;
     private Long categoryId;
@@ -135,5 +136,13 @@ public class Issue {
 
     public void setSolver(User solver) {
         this.solver = solver;
+    }
+
+    public String getSolution() {
+        return solution;
+    }
+
+    public void setSolution(String solution) {
+        this.solution = solution;
     }
 }

@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
 @RestController
 public class IssueRestController {
 
@@ -17,4 +19,17 @@ public class IssueRestController {
     public Object createIssue(@RequestBody Issue issue){
         return issueRepository.save(issue);
     }
+
+    @PostMapping("/updateIssue")
+    public Object updateIssue(@RequestBody Issue issue){
+        Optional<Issue> issue1 = issueRepository.findById(issue.getId());
+        if(issue1.isPresent()){
+            issue1.get().setStatus(issue.getStatus());
+            issue1.get().setSolution(issue.getSolution());
+
+            return issueRepository.save(issue1.get());
+        }
+        return new Issue();
+    }
+
 }
