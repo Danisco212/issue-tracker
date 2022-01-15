@@ -13,4 +13,4 @@ INSERT INTO `sub_category` (`id`, `cat_name`, `category_id`, `sub_cat_err`) VALU
 (6, 'Telephone', 2, NULL);
 
 INSERT INTO `user` (`_id`, `access_token`, `address`, `created_at`, `date_of_birth`, `email`, `first_name`, `gender`, `last_name`, `name_of_unit`, `password`, `phone_number`, `place_of_birth`, `position`, `updated_at`, `login_error`) VALUES
-(1, NULL, NULL, NULL, NULL, 'dan@g.com', 'Daniel', 1, 'Isaac', NULL, 'password', NULL, NULL, 1, NULL, NULL);
+(1, NULL, NULL, NULL, NULL, 'admin@g.com', 'Admin', 0, 'Man', NULL, 'password', NULL, NULL, 1, NULL, NULL);
