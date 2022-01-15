@@ -68,18 +68,23 @@
                 <br>
                 <div class="form-group purple-border">
                     <label>Issue Category</label>
-                    <div class="row-area" th:each="category: ${categories}">
-                        <div class="form-check">
-                            <input th:attr="onclick=|showSelectedSubCategories(this, ${category.id})|" th:value="${category.id}" class="form-check-input" type="radio" name="genderSelect" th:id="${category.id}">
-                            <label th:text="${category.catName}" class="form-check-label" th:for="${category.id}"></label>
-                        </div>
-                    </div>
+                    <select class="form-select mb-3 issueCatSelect" aria-label=".form-select example">
+                        <option th:each="category: ${categories}" th:value="${category.id}">
+                            <p th:value="${category.id}" th:text="${category.catName}"></p>
+                        </option>
+                    </select>
+<!--                    <div class="row-area" th:each="category: ${categories}">-->
+<!--                        <div class="form-check">-->
+<!--                            <input th:attr="onclick=|showSelectedSubCategories(this, ${category.id})|" th:value="${category.id}" class="form-check-input" type="radio" name="genderSelect" th:id="${category.id}">-->
+<!--                            <label th:text="${category.catName}" class="form-check-label" th:for="${category.id}"></label>-->
+<!--                        </div>-->
+<!--                    </div>-->
 <!--                    <input class="form-control" id="issueCategory" rows="3"></input>-->
                 </div>
                 <br>
                 <div class="form-group purple-border">
-                    <label for="issueSubCategory">Issue Subcategory</label>
-                    <input class="form-control" id="issueSubCategory" rows="3"></input>
+                    <label>Issue Subcategory</label>
+                    <div id="subHolder"></div>
                 </div>
 <!--                <div class="ui-widget">-->
 <!--                    <label for="tags">Tags: </label>-->
@@ -89,15 +94,19 @@
             <div style="width: 350px; height: 100%;" class="bg-white p-4">
                 <br>
                 <label>Issue Status</label>
-                <select id="issueStatusSelect" class="form-select mb-3" aria-label=".form-select example">
-                    <!--            <option th:field="${issue.status}" value="PENDING">Pending</option>-->
+                <select disabled id="issueStatusSelect" class="form-select mb-3" aria-label=".form-select example">
+                    <option th:field="${issue.status}" value="PENDING">Pending</option>
                     <option th:field="${issue.status}" value="RECEIVED">Received</option>
                     <option th:field="${issue.status}" value="RESOLVING">Resolving</option>
                 </select>
                 <br>
                 <label>Issue Solver</label>
-                <input th:field="${issue.title}" class="form-control" id="issueAssignee" rows="9"></input>
-
+                <select class="form-select mb-3 issueSolveSelect" aria-label=".form-select example">
+                    <option th:each="user: ${users}" th:value="${user._id}">
+                        <p th:value="${user._id}" th:text="${user.email}"></p>
+                    </option>
+                </select>
+<!--                <input th:field="${issue.title}" class="form-control" id="issueAssignee" rows="9"></input>-->
                 <br>
                 <br>
                 <button th:attr="onclick=|checkFields(${user._id})|" type="button" class="btn btn-primary">Save</button>

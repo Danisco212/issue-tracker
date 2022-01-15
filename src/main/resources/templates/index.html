@@ -135,6 +135,8 @@
                             <h5 class="card-title" th:text="${issue.title}"></h5>
                             <h6 class="card-subtitle mb-2 text-muted" th:text="${issue.status}"></h6>
                             <p class="card-text" th:text="${issue.reason}"></p>
+
+                            <p style="color: green;" class="text-truncate card-text" th:text="${issue.solution}"></p>
                             <a href="#" class="card-link" style="visibility: hidden;">Card link</a>
                             <p style="display: inline-block; color: #0C6EFD; cursor: pointer;" th:attr="onclick=|openIssue(${issue.id})|" class="card-link">View details</p>
                         </div>

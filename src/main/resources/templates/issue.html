@@ -88,12 +88,16 @@
                 <br>
                 <div class="form-group purple-border">
                     <label>Issue Category</label>
-
+                    <div class="alert alert-primary" role="alert">
+                        <p th:text="${category.catName}"></p>
+                    </div>
                 </div>
                 <br>
                 <div class="form-group purple-border">
                     <label>Issue Subcategory</label>
-
+                    <div class="alert alert-primary" role="alert">
+                        <p th:text="${subCategory.catName}"></p>
+                    </div>
                 </div>
                 <br>
                 <div class="form-group purple-border">
@@ -112,7 +116,7 @@
                 </select>
                 <br>
                 <label>Issue Solver</label>
-                <input th:field="${issue.title}" class="form-control" id="issueAssignee" rows="9"></input>
+                <input disabled th:field="${solver.email}" class="form-control" id="issueAssignee" rows="9"></input>
 
                 <br>
                 <br>

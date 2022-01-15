@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.relational.core.sql.Select;
 import org.springframework.stereotype.Repository;
 
+import javax.swing.text.Position;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,4 +21,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("Select o from User o WHERE o.firstName LIKE %:name% OR o.lastName LIKE %:name%")
     List<User> findByName(String name);
+
+    @Query("SELECT o FROM User o WHERE o.position = :position")
+    List<User> findByPosition(User.UserType position);
 }
