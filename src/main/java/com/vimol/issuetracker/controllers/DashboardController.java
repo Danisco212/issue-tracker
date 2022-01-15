@@ -2,8 +2,10 @@ package com.vimol.issuetracker.controllers;
 
 
 import com.vimol.issuetracker.entities.Category;
+import com.vimol.issuetracker.entities.Issue;
 import com.vimol.issuetracker.entities.User;
 import com.vimol.issuetracker.repositories.CategoryRepository;
+import com.vimol.issuetracker.repositories.IssueRepository;
 import com.vimol.issuetracker.services.AuthService;
 import com.vimol.issuetracker.utils.JwtTokenProvider;
 import com.vimol.issuetracker.utils.SecurityCipher;
@@ -19,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class DashboardController {
@@ -31,6 +34,9 @@ public class DashboardController {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private IssueRepository issueRepository;
 
     private User isLoggedIn(String authToken) {
         if (authToken != null && !authToken.equals("")) {
@@ -55,6 +61,12 @@ public class DashboardController {
     public Object homePage(@CookieValue(required = false, name = "Issue_AuthToken") String authToken, Model model) {
         User user = isLoggedIn(authToken);
         if (user != null) {
+            // get the user issues
+            List<Issue> issues = issueRepository.myCreatedIssues(user.get_id());
+            model.addAttribute("pending", issues.stream().filter(issue -> issue.getStatus().equals(Issue.IssueStatus.PENDING)).collect(Collectors.toList()));
+            model.addAttribute("resolved", issues.stream().filter(issue -> issue.getStatus().equals(Issue.IssueStatus.RESOLVED)).collect(Collectors.toList()));
+            model.addAttribute("resolving", issues.stream().filter(issue -> issue.getStatus().equals(Issue.IssueStatus.RESOLVING)).collect(Collectors.toList()));
+            model.addAttribute("received", issues.stream().filter(issue -> issue.getStatus().equals(Issue.IssueStatus.RECEIVED)).collect(Collectors.toList()));
             model.addAttribute("user", user);
             return "index";
         }

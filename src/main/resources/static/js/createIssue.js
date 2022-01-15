@@ -58,6 +58,13 @@ $( function() {
     e.target.value
   })
 
+function showSelectedSubCategories(e, category){
+    console.log(e.target)
+    if(this.selected){
+        alert(category)
+    }
+}
+
 function createIssue(userId){
     var mBody = {
         title: title.value,

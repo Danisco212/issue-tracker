@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <meta charset="UTF-8">
-    <title>Issue Tracker - Create Issue</title>
+    <title>Issue Tracker - Issue</title>
 </head>
 <body>
 <section class="d-flex flex-row vh-100">
@@ -51,19 +51,19 @@
         </div>
     </div>
     <div style="margin-left:5px; background-color: black; flex: 1; height: 100vh; overflow: scroll;" class="p-3 bg-light">
-        <h3>Create Issue</h3>
+        <h3>Issue</h3>
 
         <div class="d-flex flex-row" style="height: 100%; overflow: scroll">
             <div style="flex: 1;" class="flex-1 m-4">
                 <br>
                 <div class="form-group purple-border">
                     <label for="issueTitle">Issue Title</label>
-                    <input class="form-control" id="issueTitle" rows="3"></input>
+                    <input th:field="${issue.title}" class="form-control" id="issueTitle" rows="3"></input>
                 </div>
                 <br>
                 <div class="form-group purple-border">
                     <label for="issueReason">Issue Reason</label>
-                    <textarea class="form-control" id="issueReason" rows="3"></textarea>
+                    <textarea th:field="${issue.reason}" class="form-control" id="issueReason" rows="3"></textarea>
                 </div>
                 <br>
                 <div class="form-group purple-border">
@@ -74,25 +74,20 @@
                             <label th:text="${category.catName}" class="form-check-label" th:for="${category.id}"></label>
                         </div>
                     </div>
-<!--                    <input class="form-control" id="issueCategory" rows="3"></input>-->
                 </div>
                 <br>
                 <div class="form-group purple-border">
                     <label for="issueSubCategory">Issue Subcategory</label>
                     <input class="form-control" id="issueSubCategory" rows="3"></input>
                 </div>
-<!--                <div class="ui-widget">-->
-<!--                    <label for="tags">Tags: </label>-->
-<!--                    <input id="tags">-->
-<!--                </div>-->
             </div>
             <div style="width: 350px; height: 100%;" class="bg-white p-4">
                 <br>
                 <label>Issue Status</label>
                 <select class="form-select mb-3" aria-label=".form-select example">
-                    <!--            <option th:field="${issue.status}" value="PENDING">Pending</option>-->
                     <option th:field="${issue.status}" value="RECEIVED">Received</option>
                     <option th:field="${issue.status}" value="RESOLVING">Resolving</option>
+                    <option th:field="${issue.status}" value="PENDING">Pending</option>
                 </select>
                 <br>
                 <label>Issue Solver</label>

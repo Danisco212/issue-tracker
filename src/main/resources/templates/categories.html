@@ -60,7 +60,7 @@
         }
     </script>
     <div class="row-area" th:each="category: ${categories}">
-      <div th:attr="onclick=|openCategory(${category.id})|" style="cursor: pointer; display: flex; align-items: center;" class="shadow-sm p-3 bg-body rounded">
+      <div th:attr="onclick=|openCategory(${category.id})|" style="cursor: pointer; display: flex; align-items: center;" class="shadow-sm p-3 mb-2 bg-body rounded">
         <h5 th:text="${category.catName}"></h5>
       </div>
     </div>
