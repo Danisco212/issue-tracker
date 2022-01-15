@@ -4,3 +4,11 @@ function logoutUser(){
     var baseUrl = getUrl.protocol + "//" + getUrl.host;
     window.open(baseUrl + "/login", "_self")
 }
+
+try{
+            $(document).ready(function() {
+                $('#example').DataTable();
+            } );
+}catch (e){
+console.log(e)
+}

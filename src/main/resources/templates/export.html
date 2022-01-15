@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <title>Issue Tracker - Home Page</title>
+</head>
+<body>
+<section class="d-flex flex-row vh-100">
+    <div class="d-flex flex-column flex-shrink-0 p-3 bg-light" style="width: 280px; height: 100vh;">
+        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+            <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+            <span class="fs-4">Issue Tracker</span>
+        </a>
+        <hr>
+        <ul th:if="${#strings.equals(user.position,'SOLVER')}" class="nav nav-pills flex-column mb-auto">
+            <li class="nav-item">
+                <a href="#" class="nav-link link-dark">
+                    <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
+                    Home
+                </a>
+            </li>
+            <li>
+                <a href="#" class="nav-link link-dark">
+                    <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
+                    All Issues
+                </a>
+            </li>
+            <li>
+                <a href="/categories" class="nav-link link-dark">
+                    <svg class="bi me-2" width="16" height="16"><use xlink:href="#table"></use></svg>
+                    Manage Categories
+                </a>
+            </li>
+            <li>
+                <a href="/export" class="nav-link active" aria-current="page">
+                    <svg class="bi me-2" width="16" height="16"><use xlink:href="#table"></use></svg>
+                    Export Data
+                </a>
+            </li>
+        </ul>
+
+        <hr>
+        <div class="dropdown">
+            <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+                <strong th:text="*{user.email}"></strong>
+            </a>
+            <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
+                <li><p th:attr="onclick=|logoutUser()|" class="dropdown-item" href="#">Sign out</p></li>
+            </ul>
+        </div>
+    </div>
+    <!-- <script th:inline="javascript">
+        function openIssue(data){
+          location.href = "/issue?id=" + data
+        }
+    </script> -->
+    <div style="margin-left:5px; background-color: black; flex: 1; height: 100vh; overflow: scroll;" class="p-3 bg-light">
+        <h3>Export Issues</h3>
+        <a th:href=@{/export/excel(type=${type})}>Export to Excel</a>
+        <br>
+        <br>
+        <label>Select Status</label>
+        <div class="d-flex flex-column">
+            <a th:if="${!#strings.equals(type,'all')}" href="/export" class="link-primary">All</a>
+            <a th:if="${!#strings.equals(type,'pending')}" href="/export?type=pending" class="link-primary">Pending</a>
+            <a th:if="${!#strings.equals(type,'resolved')}" href="/export?type=resolved" class="link-primary">Resolved</a>
+            <a th:if="${!#strings.equals(type,'resolving')}" href="/export?type=resolving" class="link-primary">Resolving</a>
+        </div>
+        <br>
+        <table id="example" class="table table-striped table-bordered" style="width:100%">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Reason</th>
+                    <th>Status</th>
+                    <th>Solution</th>
+                    <th>Category</th>
+                    <th>Created By</th>
+                    <th>Solver</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="issue: ${issues}">
+                    <td th:text="${issue.id}"></td>
+                    <td th:text="${issue.title}"></td>
+                    <td th:text="${issue.reason}"></td>
+                    <td th:text="${issue.status}"></td>
+                    <td th:text="${issue.solution}"></td>
+                    <td th:text="${issue.category.catName}"></td>
+                    <td th:text="${issue.user.email}"></td>
+                    <td th:text="${issue.solver.email}"></td>
+                </tr>
+            </tbody>
+        </table>
+<!--        <script th:inline="javascript">-->
+<!--            $(document).ready(function() {-->
+<!--                $('#example').DataTable();-->
+<!--            } );-->
+<!--        </script>-->
+    </div>
+</section>
+
+</body>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+ <script src="https://code.jquery.com/jquery-3.5.1.js" type="text/javascript" crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js" type="text/javascript" crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap4.min.js" type="text/javascript" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" type="text/javascript" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script th:src="@{/js/logout.js}" ></script>
+</html>

@@ -13,4 +13,5 @@ public interface IssueRepository extends JpaRepository<Issue, Long> {
 
     @Query("SELECT o FROM Issue o WHERE solver_id = :id")
     List<Issue> myAssignedIssues(Long id);
+
 }

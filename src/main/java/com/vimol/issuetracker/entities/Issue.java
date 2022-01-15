@@ -32,6 +32,10 @@ public class Issue {
 
     @JsonInclude
     @Transient
+    private Category category;
+
+    @JsonInclude
+    @Transient
     private User user;
 
     @JsonInclude
@@ -144,5 +148,13 @@ public class Issue {
 
     public void setSolution(String solution) {
         this.solution = solution;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }
